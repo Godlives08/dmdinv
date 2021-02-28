@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% block navbar %}
+{% if user.is_authenticated %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #e3f2fd !important;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'home:index' %}">
+      <img class="" src="{% static 'images/far.png' %}" alt="" width="30" height="24" class="d-inline-block align-top">
+      MDM Paquetes
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {% if grupo_itemurl %}
+        {% for grupo in grupo_itemurl %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="{{ grupo.icon }}"> </i> {{ grupo.description_1 }}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            {% for itemurl in grupo.itemurl_set.all %}
+            {% if itemurl.active %}
+            <li><a class="dropdown-item" href="{% url itemurl.url %}"><i class="{{ itemurl.icon }}"> </i> {{ itemurl.description_1 }}</a></li>
+            {% else %}
+            <li><a class="dropdown-item disabled" href="{% url itemurl.url %}"><i class="bi-alarm"> </i> {{ itemurl.description_1 }}</a></li>
+            {% endif %}
+            {% endfor %}
+          </ul>
+        </li>
+        {% endfor %}
+        {% else %}
+        <p>No grupo are available.</p>
+        {% endif %}
+      </ul>
+      <span class="navbar-text">
+        <a class="nav-link" href="{% url 'logout'%}?next={{request.path}}"><i class="bi bi-key"> </i> Logout {{ user.get_username }}</a>
+      </span>
+    </div>
+  </div>
+</nav>
+{% endif %}
+<div class="container-fluid">
+  {% block content %}{% endblock %}
+</div>
+{% endblock %}

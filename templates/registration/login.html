@@ -1,0 +1,65 @@
+{% extends "navbar.html" %}
+{% load static %}
+{% load i18n static %}
+{% block title %} <title>Login</title> {% endblock %}
+{% block content %}
+<style>
+    body {
+        background-color: #58a6b3 !important;
+    }
+</style>
+
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img class="img-fluid mt-5" src="{% static 'images/logo.png' %}" alt="Logo">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Login</h5>
+                            {% if form.errors and not form.non_field_errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {% if form.errors.items|length == 1 %}{% translate "Please correct the error below."
+                                %}{% else %}{% translate "Please correct the errors below." %}{% endif %}
+                            </div>
+                            {% endif %}
+
+                            <form method="POST">
+                                <p>
+                                    <label for="id_username">Nombre de usuario:</label><br>
+                                    {{ form.username.errors }}
+                                    <input type="text" name="username" autofocus autocapitalize="none"
+                                        autocomplete="username" maxlength="150" required id="id_username">
+                                </p>
+                                <p>
+                                    <label for="id_password">Contraseña:</label><br>
+                                    {{ form.password.errors }}
+                                    <input type="password" name="password" autocomplete="current-password" required
+                                        id="id_password">
+                                </p>
+                                {% csrf_token %}
+
+                                <button class="btn btn-primary" type="submit">Login</button>
+                            </form>
+
+                            {% if form.non_field_errors %}
+                            {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                            <!-- <a href="/register">Registrar usuario</a> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
